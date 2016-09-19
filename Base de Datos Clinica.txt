@@ -1,0 +1,542 @@
+CREATE database HistoriaClinica;
+
+
+
+use HistoriaClinica;
+
+
+
+
+CREATE TABLE Propietario(
+
+
+
+`codHistoriaClinica` INT NOT NULL auto_increment,
+
+`Nombre` VARCHAR(50) NOT NULL,
+
+`C.C` VARCHAR(20) NOT NULL,
+
+`Telefono` VARCHAR(20) NOT NULL,
+
+`Celular` VARCHAR(20) NOT NULL,
+
+`Direccion` VARCHAR(20) NOT NULL,
+
+`CorreoElectronico` VARCHAR(20) NOT NULL,
+
+
+PRIMARY KEY (`codHistoriaClinica`)
+)
+ENGINE = InnoDB;
+
+
+
+
+
+CREATE TABLE Pacientes (
+
+
+
+`codPaciente` INT NOT NULL auto_increment,
+
+`Nombre` VARCHAR(20) NOT NULL,
+
+`Especie` VARCHAR(20) NOT NULL,
+
+`Raza` VARCHAR(20) NOT NULL,
+
+`Genero` VARCHAR(20) NOT NULL,
+
+`Color` VARCHAR(20) NOT NULL,
+
+`Edad` VARCHAR(20) NOT NULL,
+
+`F.C` VARCHAR(20) NOT NULL,
+
+`F.R` VARCHAR(20) NOT NULL,
+
+`TLLC` VARCHAR(20) NOT NULL,
+
+`Temperatura` VARCHAR(20) NOT NULL,
+
+`Peso` VARCHAR(20) NOT NULL,
+
+`Ciclo Estral` VARCHAR(20) NOT NULL,
+
+`Planif.` VARCHAR(20) NOT NULL,
+
+`Entero(a)` VARCHAR(20),
+
+`Castrado(a)` VARCHAR(20),
+
+`Vacunas` VARCHAR(20) NOT NULL,
+
+`Desparacitacion` VARCHAR(20) NOT NULL,
+
+`Anamnesicos` VARCHAR(500) NOT NULL,
+
+`Antipulgas` VARCHAR(50) NOT NULL,
+
+`Alimentacion` VARCHAR(500) NOT NULL,
+
+`Cod_Propietario` INT NOT NULL,
+
+
+PRIMARY KEY (`codPaciente`),
+
+
+
+CONSTRAINT `Cod_Propietario` FOREIGN KEY (`Cod_Propietario`)REFERENCES Propietario (`codHistoriaClinica`)
+
+)ENGINE = InnoDB;
+
+
+
+
+
+
+CREATE TABLE EstadoGeneral(
+  
+
+`codEstadoGeneral` INT NOT NULL auto_increment,
+
+`Nariz` VARCHAR(200) NOT NULL,
+
+`Boca` VARCHAR(200) NOT NULL,
+
+`Ojos` VARCHAR(200) NOT NULL,
+
+`Orejas` VARCHAR(200) NOT NULL,
+
+`Piel` VARCHAR(200) NOT NULL,
+
+`Extremidades` VARCHAR(500) NOT NULL,
+
+`Mucosas` VARCHAR(60) NOT NULL,
+
+`Pelaje` VARCHAR(200) NOT NULL,
+
+`Dientes` VARCHAR(100) NOT NULL,
+
+`Uñas` VARCHAR(60) NOT NULL,
+
+`Cod_Paciente` INT NULL,
+
+
+PRIMARY KEY (`codEstadoGeneral`),
+
+
+
+CONSTRAINT `cod_Paciente`FOREIGN KEY (`Cod_Paciente`)REFERENCES Pacientes(`codPaciente`)
+
+)ENGINE = InnoDB;
+
+
+
+
+
+
+
+CREATE TABLE Sistemas (
+  
+
+
+`codSistemas` INT NOT NULL auto_increment,
+
+`Musculos/Esqueleticos` VARCHAR(200) NOT NULL,
+
+`Respiratorio` VARCHAR(200) NOT NULL,
+
+`Urinario/Reproductivo` VARCHAR(200) NOT NULL,
+
+`Neurologico` VARCHAR(200) NOT NULL,
+
+`Optico/Oftalmologico` VARCHAR(200) NOT NULL,
+
+`Tegumentario` VARCHAR(200) NOT NULL,
+
+`CardioVascular` VARCHAR(200) NOT NULL,
+
+`Digestivo` VARCHAR(200) NOT NULL,
+
+`Co_Paciente` INT NOT NULL,
+PRIMARY KEY (`codSistemas`),
+
+
+
+CONSTRAINT `Co_Paciente`FOREIGN KEY (`Co_Paciente`)REFERENCES Pacientes (`codPaciente`)
+
+)ENGINE = InnoDB;
+
+
+
+
+
+
+
+CREATE TABLE AyudasDiagnostico (
+  
+
+`id_Ayudas` INT NOT NULL auto_increment,
+
+`Tratamiento` TEXT(10000) NOT NULL,
+
+`DiagnosticoPresuntivo` TEXT(10000) NOT NULL,
+
+`DiagnosticoDiferencial` TEXT(10000) NOT NULL,
+`Cod_EstadoGeneral` INT NOT NULL,
+
+`Cod_Sistemas` INT NOT NULL,
+
+
+PRIMARY KEY (`id_Ayudas`),
+
+
+
+CONSTRAINT `codSistemas`FOREIGN KEY (`Cod_Sistemas`) REFERENCES Sistemas(`codSistemas`),
+
+CONSTRAINT `codEstadoGeneral` FOREIGN KEY (`Cod_EstadoGeneral`)REFERENCES EstadoGeneral (`codEstadoGeneral`)
+
+)ENGINE = InnoDB;
+
+
+
+
+
+
+
+CREATE TABLE CarnetVacunacion (
+  
+`codCarnetVacunacion`INT NOT NULL auto_increment,
+
+`Fecha` DATE NOT NULL,
+
+`Nombre` VARCHAR(20) NOT NULL,
+
+`Especie` VARCHAR(20) NOT NULL,
+
+`Raza` VARCHAR(20) NOT NULL,
+
+`Color` VARCHAR(20) NOT NULL,
+
+`Genero` VARCHAR(20) NOT NULL,
+
+`Edad` VARCHAR(20) NOT NULL,
+
+`Propietario` VARCHAR(50) NOT NULL,
+
+`Direccion` VARCHAR(20) NOT NULL,
+
+`Telefono` VARCHAR(20) NOT NULL,
+
+`Celular` VARCHAR(20) NOT NULL,
+
+`Vacunas` VARCHAR(20) NOT NULL,
+
+`FechaVacuna` DATE NOT NULL,
+
+`FechaRefuerzo` DATE NOT NULL,
+
+`Firma` VARCHAR(20) NOT NULL,
+
+`Cod_Paciente` INT NOT NULL,
+
+
+PRIMARY KEY (`codCarnetVacunacion`),
+
+CONSTRAINT `id_Paciente`FOREIGN KEY (`Cod_Paciente`)REFERENCES Pacientes (`codPaciente`)
+
+)ENGINE = InnoDB;
+
+
+
+
+
+CREATE TABLE ComprobantePago (
+  
+
+`N°Factura` INT NOT NULL auto_increment,
+
+`Propietario` VARCHAR(50) NOT NULL,
+
+`Mascota` VARCHAR(20) NOT NULL,
+
+`Raza` VARCHAR(20) NOT NULL,
+
+`Genero` VARCHAR(20) NOT NULL,
+
+`Color` VARCHAR(20) NOT NULL,
+
+`Collar` VARCHAR(20),
+
+`Precio` DOUBLE NOT NULL,
+
+`Observaciones` varchar(300) NOT NULL,
+
+`Cod_Propietario` INT NOT NULL,
+
+
+PRIMARY KEY (`N°Factura`),
+
+
+CONSTRAINT `codpropietario`FOREIGN KEY (`Cod_Propietario`) REFERENCES Propietario (`codHistoriaClinica`)
+
+)ENGINE = InnoDB;
+
+
+
+
+
+
+insert into propietario(`Nombre`,`C.C`,`Telefono`,`Celular`,`Direccion`,`CorreoElectronico`)
+
+values('Fabio Gaince', '1007616077', '74566687', '3212897744','Cr 1b # 41-42 sur', 'fagaince@hotmail.com'); 
+
+
+insert into propietario(`Nombre`,`C.C`,`Telefono`,`Celular`,`Direccion`,`CorreoElectronico`)
+
+values('Erick Giraldo', '98101700747', '6485612', '3229001470','cr2 A # 31- 56', 'egiraldo@hotmail.com');
+
+
+
+insert into propietario(`Nombre`,`C.C`,`Telefono`,`Celular`,`Direccion`,`CorreoElectronico`)
+
+values('Yeison Bejarano', '1024538521', '7761415', '3126636516','cr 120 #118-128 bis', 'ybejarano@gmail.com');
+
+
+insert into propietario(`Nombre`,`C.C`,`Telefono`,`Celular`,`Direccion`,`CorreoElectronico`)
+
+values('Nicolas Vargas', '1015538577', '5761415', '3212665137','cr 120 #118-128', 'nicolas@hotmail.com');
+
+
+
+insert into propietario(`Nombre`,`C.C`,`Telefono`,`Celular`,`Direccion`,`CorreoElectronico`)
+
+values('Junior Salazar', '1015538577','5761413', '3216635136','cr 7 # 21-46', 'jsalazar@hotmail.com');
+
+
+
+
+
+
+
+
+insert into pacientes(`Nombre`,`Especie`,`Raza`,`Genero`,`Color`,`Edad`,`F.C`,`F.R`,`TLLC` ,`Temperatura`,`Peso`,`Ciclo Estral`,`Planif.`,`Entero(a)`,`Castrado(a)`,`Vacunas`,`Desparacitacion`,`Anamnesicos`,`Antipulgas`,`Alimentacion`,`Cod_Propietario`)
+
+values('Taizon','Perro','Pitbull','Masculino','blanco','4','20','38.5°','54','35.5°', '25kg','lunes','1 mes','si','no','Antirrabia','si','no','si','Cada 6 veces al dia','1' ); 
+
+
+
+
+insert into pacientes(`Nombre`,`Especie`,`Raza`,`Genero`,`Color`,`Edad`,`F.C`,`F.R`,`TLLC` ,`Temperatura`,`Peso`,`Ciclo Estral`,`Planif.`,`Entero(a)`,`Castrado(a)`,`Vacunas`,`Desparacitacion`,`Anamnesicos`,`Antipulgas`,`Alimentacion`,`Cod_Propietario`)
+
+values('Kasper','Perro','Bulldog','Masculino','Rojo','6','50','60','46','32°', '62kg','jueves','3 mes','si','no','Antirrabia','no', 'si','si',' cada 3 veces al dia','2' ); 
+
+
+
+
+insert into pacientes(`Nombre`,`Especie`,`Raza`,`Genero`,`Color`,`Edad`,`F.C`,`F.R`,`TLLC` ,`Temperatura`,`Peso`,`Ciclo Estral`,`Planif.`,`Entero(a)`,`Castrado(a)`,`Vacunas`,`Desparacitacion`,`Anamnesicos`,`Antipulgas`,`Alimentacion`,`Cod_Propietario`)
+
+values('kanichi','gato','abisimo','Femenino','cafe','6','26','35','20','32°', '25kg','miercoles','7 mes','no','no','Triple','no', 'si','no','4 veces al dia','5' ); 
+
+
+
+
+insert into pacientes(`Nombre`,`Especie`,`Raza`,`Genero`,`Color`,`Edad`,`F.C`,`F.R`,`TLLC` ,`Temperatura`,`Peso`,`Ciclo Estral`,`Planif.`,`Entero(a)`,`Castrado(a)`,`Vacunas`,`Desparacitacion`,`Anamnesicos`,`Antipulgas`,`Alimentacion`,`Cod_Propietario`)
+
+values('karoll','Cerdo','pietrain','Masculino','crema','6','30','20','34','30°', '55kg','viernes','3 mes','si','no','Parvo','no', 'si','si','3 veces al dia','3' ); 
+
+
+
+insert into pacientes(`Nombre`,`Especie`,`Raza`,`Genero`,`Color`,`Edad`,`F.C`,`F.R`,`TLLC` ,`Temperatura`,`Peso`,`Ciclo Estral`,`Planif.`,`Entero(a)`,`Castrado(a)`,`Vacunas`,`Desparacitacion`,`Anamnesicos`,`Antipulgas`,`Alimentacion`,`Cod_Propietario`)
+
+values('charlotte','Perro','bull terrier','Femenino','negro','5','10','20','40','45°', '28kg','miercoles','1 dia','si','si','Antirrabia','no', 'si','si ',' cada 4 horas','4' ); 
+
+
+
+
+
+
+
+
+
+insert into EstadoGeneral(`Nariz`,`Boca`,`Ojos`,`Orejas`,`Piel`,`Extremidades`,`Mucosas`,`Pelaje`,`Dientes`,`Uñas`)
+
+values('completa','caries','buen estado','bun estado','muy suave','buenas','no','deteriorado','completo','buen estado'); 
+
+
+
+
+insert into EstadoGeneral(`Nariz`,`Boca`,`Ojos`,`Orejas`,`Piel`,`Extremidades`,`Mucosas`,`Pelaje`,`Dientes`,`Uñas`)
+
+values('herida grave','buen estado','buen estado','rasguñada','robusta','buenas','si','buen estado','regulares','regular'); 
+
+
+
+insert into EstadoGeneral(`Nariz`,`Boca`,`Ojos`,`Orejas`,`Piel`,`Extremidades`,`Mucosas`,`Pelaje`,`Dientes`,`Uñas`)
+
+values('buen estado','excelentes','buen estado','En excelente estado','buenas condiciones','buenas','si','muy deteriorado','completo','mal estado'); 
+
+
+insert into EstadoGeneral(`Nariz`,`Boca`,`Ojos`,`Orejas`,`Piel`,`Extremidades`,`Mucosas`,`Pelaje`,`Dientes`,`Uñas`)
+
+values('completa','caries','buen estado','bun estado','esta muy debil','buenas','no','excelente','completo','buen estado'); 
+
+
+
+insert into EstadoGeneral(`Nariz`,`Boca`,`Ojos`,`Orejas`,`Piel`,`Extremidades`,`Mucosas`,`Pelaje`,`Dientes`,`Uñas`)
+
+values('herida profunda','buen estado','excelente','rasguñada','bun estado','herida en la pierna frontal derecha','no','deteriorado','incompletos','normal');
+
+
+
+
+
+
+
+
+insert into Sistemas(`Musculos/Esqueleticos`,`Respiratorio`,`Urinario/Reproductivo`,`Neurologico`,`Optico/Oftalmologico`,`Tegumentario`,`CardioVascular`,`Digestivo`,`Co_Paciente`)
+
+values('normales','bueno','buen estado','excelente','buen estado','mal','deprame intenso de sangre','gastritis','2');
+
+
+insert into Sistemas(`Musculos/Esqueleticos`,`Respiratorio`,`Urinario/Reproductivo`,`Neurologico`,`Optico/Oftalmologico`,`Tegumentario`,`CardioVascular`,`Digestivo`,`Co_Paciente`)
+
+values('desgare','regular','buen estado','excelente','','mal','buen estado','excelente','5');
+
+
+
+insert into Sistemas(`Musculos/Esqueleticos`,`Respiratorio`,`Urinario/Reproductivo`,`Neurologico`,`Optico/Oftalmologico`,`Tegumentario`,`CardioVascular`,`Digestivo`,`Co_Paciente`)
+
+values('buen estado','excelente','excelente','regulares','excelente','bien','excelentes','normoles','1');
+
+
+
+insert into Sistemas(`Musculos/Esqueleticos`,`Respiratorio`,`Urinario/Reproductivo`,`Neurologico`,`Optico/Oftalmologico`,`Tegumentario`,`CardioVascular`,`Digestivo`,`Co_Paciente`)
+
+values('normales','bueno','buen estado','excelente','buen estado','buen estado','eficaz','dolordeestomago','3');
+
+
+
+insert into Sistemas(`Musculos/Esqueleticos`,`Respiratorio`,`Urinario/Reproductivo`,`Neurologico`,`Optico/Oftalmologico`,`Tegumentario`,`CardioVascular`,`Digestivo`,`Co_Paciente`)
+
+values('buen estado','excelente','excelente','regulares','mal estado','bien','buen estado','regular','4');
+
+
+
+
+
+
+insert into AyudasDiagnostico(`Tratamiento`, `DiagnosticoPresuntivo`,`DiagnosticoDiferencial`,`Cod_EstadoGeneral`,`Cod_Sistemas`)
+
+values('debe aplicarse una crema para que su pelaje meroje','El paciente se hirrio con uns estsca mientra jugaba ','De acuerdo a los examenes que se le hicieron no presento ningun sintoma en sus sistemas','1','3'); 
+
+
+insert into AyudasDiagnostico(`Tratamiento`, `DiagnosticoPresuntivo`,`DiagnosticoDiferencial`,`Cod_EstadoGeneral`,`Cod_Sistemas`)
+
+values('aplicarse una crema para cicatrisar la nariz y  tomas un medicamento para la gastriti','Le paso mientras jugaba en la terraza','Al examinar los resultados se le encontro un problema en el optico derecho de la mascota por el golpe que recibio','2','1'); 
+
+
+insert into AyudasDiagnostico(`Tratamiento`, `DiagnosticoPresuntivo`,`DiagnosticoDiferencial`,`Cod_EstadoGeneral`,`Cod_Sistemas`)
+
+values('le aplicara cada 4 horas dos gotas y aplicarse la crema cada vez que lo baña','Mediante estaba comiento empezo a ladrar y a sentirse muy mal','Al ver los resultados de los examenes se encontro que esta es desnutrido y que no come las comidas  como debe ser','3','2'); 
+
+
+
+insert into AyudasDiagnostico(`Tratamiento`, `DiagnosticoPresuntivo`,`DiagnosticoDiferencial`,`Cod_EstadoGeneral`,`Cod_Sistemas`)
+
+values('debe aplicar cada vez que se baña la crema y tomar a cada 3 horas el remedio para la gastritis','Al sacarlo  me di cuenta que el se iba para los lados y se golpeaba','Al mirar los examenes resetados se de dujo que puede perder la vista por algun maltrato que resibio','4','4'); 
+
+
+
+insert into AyudasDiagnostico(`Tratamiento`, `DiagnosticoPresuntivo`,`DiagnosticoDiferencial`,`Cod_EstadoGeneral`,`Cod_Sistemas`)
+
+values('debe aplicarse la crema cada 4 horas','Al examinarlo se encontro todos los sistemas en buen estado','No es necesario resetarle unos examenes','5','5'); 
+
+
+
+
+
+
+
+insert into carnetvacunacion(`Fecha` ,`Nombre`,`Especie` ,`Raza` ,`Color`,`Genero`,`Edad`,`Propietario`,`Direccion`,`Telefono`,`Celular`,`Vacunas`,`FechaVacuna`,`FechaRefuerzo`,`Firma`,`Cod_Paciente`)
+
+values('2016/02/10','Taizon','Perro','Pitbull','blanco','Masculino','4','1','cr 1b #41-42 sur','7456687','3212897744', 'al dia','2016/02/08','2016/03/31','francisco','1');
+
+
+
+
+
+
+insert into carnetvacunacion(`Fecha` ,`Nombre`,`Especie` ,`Raza` ,`Color`,`Genero`,`Edad`,`Propietario`,`Direccion`,`Telefono`,`Celular`,`Vacunas`,`FechaVacuna`,`FechaRefuerzo`,`Firma`,`Cod_Paciente`)
+
+values('2015/01/09','Charlotte','Perro','Bull terrier','negro','Femenino','5','4','cr 120 #118-128','5761415','3212665137', 'pendiente','2015/03/10','2016/04/11','segundo','5');
+
+
+
+
+
+
+insert into carnetvacunacion(`Fecha` ,`Nombre`,`Especie` ,`Raza` ,`Color`,`Genero`,`Edad`,`Propietario`,`Direccion`,`Telefono`,`Celular`,`Vacunas`,`FechaVacuna`,`FechaRefuerzo`,`Firma`,`Cod_Paciente`)
+
+values('2015/10/11','Kasper','Perro','bulldog','Rojo','Masculino','6','2','cr2 A # 31- 56','6485612','3229001470', 'no tiene','2016/02/01','2016/03/31','francisco','2');
+
+
+
+
+
+
+insert into carnetvacunacion(`Fecha` ,`Nombre`,`Especie` ,`Raza` ,`Color`,`Genero`,`Edad`,`Propietario`,`Direccion`,`Telefono`,`Celular`,`Vacunas`,`FechaVacuna`,`FechaRefuerzo`,`Firma`,`Cod_Paciente`)
+
+values('2014/07/11','Kanichi','Gato','abismo','cafe','Femenino','6','5','cr 7 # 21-46','5761413','3216635136', 'al dia','2016/08/08','2016/09/30','aguilar','3');
+
+
+
+
+
+
+insert into carnetvacunacion(`Fecha` ,`Nombre`,`Especie` ,`Raza` ,`Color`,`Genero`,`Edad`,`Propietario`,`Direccion`,`Telefono`,`Celular`,`Vacunas`,`FechaVacuna`,`FechaRefuerzo`,`Firma`,`Cod_Paciente`)
+
+values('2015/09/10','karoll','Cerdo','Pietrain','crema','Masculino','6','3','cr 120 #118-128 bis','7761415','3126636516', 'al dia','2015/12/31','2016/02/12','segundo','4');
+
+
+
+
+
+
+
+insert into comprobantePago(`Propietario`,`Mascota`,`Raza`,`Genero`,`Color`,`Collar`,`Precio`,`Observaciones`,`Cod_Propietario`)
+
+values('Fabio Gaince','Taizon','Pitbull','Masculino','Blanco','no','150000','Ha cancelado todo','1'); 
+
+
+
+insert into comprobantePago(`Propietario`,`Mascota`,`Raza`,`Genero`,`Color`,`Collar`,`Precio`,`Observaciones`,`Cod_Propietario`)
+
+values('Erick Giraldo','Kasper','Bulldog','Masculino','Rojo','si','10000', 'Debe 50 mil','2'); 
+
+
+
+insert into comprobantePago(`Propietario`,`Mascota`,`Raza`,`Genero`,`Color`,`Collar`,`Precio`,`Observaciones`,`Cod_Propietario`)
+
+values('Yeison Bejarano','Karoll','Pietrain','Masculino','Crema','no','10000', 'Ha cancelado la mitad y debe 10000','3'); 
+
+
+
+insert into comprobantePago(`Propietario`,`Mascota`,`Raza`,`Genero`,`Color`,`Collar`,`Precio`,`Observaciones`,`Cod_Propietario`)
+
+values('Nicolas Vargas','Charlotte','Bull terrier','Femenino','negro','si','50000', 'Ha cancelado todo','4'); 
+
+
+
+insert into comprobantePago(`Propietario`,`Mascota`,`Raza`,`Genero`,`Color`,`Collar`,`Precio`,`Observaciones`,`Cod_Propietario`)
+
+values('Junior Salazar','Kanichi','Abismo','Femenino','Cafe','si','25000', 'Ha cancelado todo','5'); 
+
+
+select Propietario.Nombre as Propietario, Pacientes.Nombre as Mascotas
+
+from Pacientes inner join Propietario 
+
+on Propietario.codHistoriaClinica=Pacientes.Cod_Propietario;
