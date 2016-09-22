@@ -4,70 +4,40 @@ use HistoriaClinica;
 
 
 CREATE TABLE Propietario(
-
 `codHistoriaClinica` INT NOT NULL auto_increment,
-
 `Nombre` VARCHAR(50) NOT NULL,
-
 `C.C` VARCHAR(20) NOT NULL,
-
 `Telefono` VARCHAR(20) NOT NULL,
-
 `Celular` VARCHAR(20) NOT NULL,
-
 `Direccion` VARCHAR(20) NOT NULL,
-
 `CorreoElectronico` VARCHAR(20) NOT NULL,
-
 
 PRIMARY KEY (`codHistoriaClinica`)
 )ENGINE = InnoDB;
 
 
-
 CREATE TABLE Pacientes (
 `codPaciente` INT NOT NULL auto_increment,
-
 `Nombre` VARCHAR(20) NOT NULL,
-
 `Especie` VARCHAR(20) NOT NULL,
-
 `Raza` VARCHAR(20) NOT NULL,
-
 `Genero` VARCHAR(20) NOT NULL,
-
 `Color` VARCHAR(20) NOT NULL,
-
 `Edad` VARCHAR(20) NOT NULL,
-
 `F.C` VARCHAR(20) NOT NULL,
-
 `F.R` VARCHAR(20) NOT NULL,
-
 `TLLC` VARCHAR(20) NOT NULL,
-
 `Temperatura` VARCHAR(20) NOT NULL,
-
 `Peso` VARCHAR(20) NOT NULL,
-
 `Ciclo Estral` VARCHAR(20) NOT NULL,
-
 `Planif.` VARCHAR(20) NOT NULL,
-
 `Entero(a)` VARCHAR(20),
-
 `Castrado(a)` VARCHAR(20),
-
 `Vacunas` VARCHAR(20) NOT NULL,
-
 `Desparacitacion` VARCHAR(20) NOT NULL,
-
 `Anamnesicos` VARCHAR(500) NOT NULL,
-
 `Antipulgas` VARCHAR(50) NOT NULL,
-
 `Alimentacion` VARCHAR(500) NOT NULL,
-
 `Cod_Propietario` INT NOT NULL,
 PRIMARY KEY (`codPaciente`),
 
