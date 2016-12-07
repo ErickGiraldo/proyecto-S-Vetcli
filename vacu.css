@@ -1,0 +1,93 @@
+        *{
+            box-sizing: border-box;
+        }
+
+        body{
+            margin: 0;
+            font-family: sans-serif;
+            background: #204862;
+            padding: 5%;
+        }
+
+        h1{
+            color: #fff;
+            text-align: center;
+        }
+        h3{
+            text-align: center;
+        }
+        .form-register{
+            width: 10%;
+            max-width: 450px;
+            margin: auto;
+            background: white;
+            border-radius: 7px;
+        }
+        .titulo{
+            background:deepskyblue;
+            color:#fff;
+            padding: 12px;
+            text-align: center;
+            font-weight: 100;
+            font-size: 30px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            border-bottom: 3px solid crimson;
+        }
+        .contenedor-inputs{
+            padding: 10px 30px;
+            display: left;
+            flex-wrap: wrap;
+            justify-content: space-between;/*para separar los inputs*/
+        }
+
+        input{
+            margin-bottom: 15px;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 3px;
+            border:1px solid darkgray;
+        }
+        .input-100{
+           width: 100%;
+        }
+        .input-50{
+            width: 19.5%;
+        }
+        .input-30{
+            width: 10%;
+        }
+        .btn-enviar{
+            color: white;
+            background: crimson;
+            margin: auto;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .btn-enviar:active{
+            transform: scale(1.08);
+        }
+
+        table{
+            border:1px solid darkgray;
+            margin: 0;
+            padding: 0;
+            border-radius:6px;
+        }
+        th{
+            background: #33ffff;
+            border:1px solid darkgray;
+        }
+        td{
+            background: darkgray;
+        }/*
+        .imagen-izquierda{
+            float: left;
+            width: 30%;
+            height: 30%;
+        }
+        .imagen-derecha{
+            float:right;
+            width: 30%;
+            height: 30%;
+        }*/
