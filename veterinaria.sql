@@ -1,153 +1,140 @@
-CREATE SCHEMA IF NOT EXISTS `veterinaria` DEFAULT CHARACTER SET utf8 ;
-USE `veterinaria` ;
+CREATE DATABASE veterinaria;
 
--- Table `veterinaria`.`cliente`
+USE veterinaria;
 
-CREATE TABLE IF NOT EXISTS `veterinaria`.`cliente` (
-  `n_cedula` INT(11) NOT NULL,
-  `nombres` VARCHAR(45) NOT NULL,
-  `telefono` VARCHAR(45) NOT NULL,
-  `correo` VARCHAR(45) NOT NULL,
-  `celular` VARCHAR(45) NOT NULL,
-  `direccion` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`n_cedula`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+CREATE TABLE especie
+(
+	idEspecie int primary key auto_increment,
+	nomEspecie varchar(45) not null
+);
 
+CREATE TABLE raza
+(
+	idRaza int primary key auto_increment,
+	nomRaza  varchar(45) not null
+);
+CREATE TABLE TipoDocumento(
+	idTipoDocu int not null primary key auto_increment,
+	documento char(20) not null
+);
 
--- Table `veterinaria`.`especie`
+CREATE table propietario
+(
+	idPropietario int primary key auto_increment,
+	nombres varchar(50) not null,
+	codDocumento int not null,
+	numDocumento varchar(10) not null,
+    telefono char(7) not null,
+    celular char(10) not null,
+    direccion text not null,
+    correo varchar(70) not null,
+    foreign key(codDocumento) references TipoDocumento(idTipoDocu)
+);
 
-CREATE TABLE IF NOT EXISTS `veterinaria`.`especie` (
-  `idespecie` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idespecie`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+CREATE TABLE mascota
+(
+	idMascota int primary key auto_increment,
+	nombreMas varchar(45) not null,
+	sexo char(6) not null,
+    color varchar(45) not null,
+    fechaNaci date not null,
+    codPropietario int,
+    codEspecie int,
+    codRaza int,
+    foreign key (codPropietario) references propietario(idPropietario),
+    foreign key (codEspecie) references especie (idEspecie),
+    foreign key (codRaza) references raza (idRaza)
+);
 
+CREATE TABLE diagnostico
+(
+	idDiagno int primary key auto_increment,
+	diagnostico text not null,
+	codMascota int,
+	foreign key(codMascota) references mascota (idMascota)
+);
 
--- Table `veterinaria`.`raza`
+CREATE TABLE chequeo
+( 
+	idChequeo int primary key auto_increment,
+	fc char(4) not null,
+	fr char(4) not null,
+	tllc char (4) not null,
+	temperatura char(10) not null,
+	peso varchar(10) not null,
+	entero char(2) null,
+	vacunas varchar(45) not null,
+	alimentacion varchar(45) not null,
+	desparacitacion varchar(45) not null,
+	anamnesicos text not null,
+	codMascota int,
+	fecha date not null,
+	foreign key(codMascota) references mascota (idMascota)
+);
 
-CREATE TABLE IF NOT EXISTS `veterinaria`.`raza` (
-  `idraza` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idraza`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+CREATE TABLE rol(
+idRol int primary key auto_increment,
+rol varchar(11) not null
+);
 
+CREATE TABLE usuario
+(
+	idUsuario int primary key auto_increment,
+	nombreUsu varchar(50) not null,
+	usuario varchar(20) not null,
+	clave varchar(80) not null,
+	codRol int,
+	telefono char(7) null,
+	celular char(10) not null,
+	correo varchar(70) not null,
+	foreign key(codRol) references rol(idRol)
+);
 
--- Table `veterinaria`.`paciente`
+---------------view----------------------------
+CREATE VIEW Login 
+AS 
+Select *
+FROM usuario;
 
-CREATE TABLE IF NOT EXISTS `veterinaria`.`paciente` (
-  `idpaciente` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NOT NULL,
-  `sexo` VARCHAR(45) NOT NULL,
-  `edad` VARCHAR(45) NOT NULL,
-  `color` VARCHAR(45) NOT NULL,
-  `cliente_n_cedula` INT(11) NOT NULL,
-  `especie_idespecie` INT(11) NOT NULL,
-  `raza_idraza` INT(11) NOT NULL,
-  PRIMARY KEY (`idpaciente`),
-  CONSTRAINT `fk_paciente_cliente`
-    FOREIGN KEY (`cliente_n_cedula`)
-    REFERENCES `veterinaria`.`cliente` (`n_cedula`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_paciente_especie1`
-    FOREIGN KEY (`especie_idespecie`)
-    REFERENCES `veterinaria`.`especie` (`idespecie`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_paciente_raza1`
-    FOREIGN KEY (`raza_idraza`)
-    REFERENCES `veterinaria`.`raza` (`idraza`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- Table `veterinaria`.`chequeo`
-
-CREATE TABLE IF NOT EXISTS `veterinaria`.`chequeo` (
-  `idchequeo` INT(11) NOT NULL AUTO_INCREMENT,
-  `fecha` DATE NOT NULL,
-  `frecuencia_cardiaca` VARCHAR(10) NOT NULL,
-  `fr` VARCHAR(10) NOT NULL,
-  `tiempo_llenado_capilar` VARCHAR(45) NOT NULL,
-  `temperatura` VARCHAR(45) NOT NULL,
-  `peso` VARCHAR(45) NOT NULL,
-  `Entero` VARCHAR(10) NULL DEFAULT NULL,
-  `castrado` VARCHAR(10) NULL DEFAULT NULL,
-  `vacunas` VARCHAR(45) NOT NULL,
-  `alimentacion` VARCHAR(45) NOT NULL,
-  `desparcitacion` VARCHAR(45) NOT NULL,
-  `anamnesicos` TEXT NOT NULL,
-  `paciente_idpaciente` INT(11) NOT NULL,
-  PRIMARY KEY (`idchequeo`, `paciente_idpaciente`),
-  INDEX `fk_chequeo_paciente1_idx` (`paciente_idpaciente` ASC),
-  CONSTRAINT `fk_chequeo_paciente1`
-    FOREIGN KEY (`paciente_idpaciente`)
-    REFERENCES `veterinaria`.`paciente` (`idpaciente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8;
-
-
--- Table `veterinaria`.`diagnostico`
-
-CREATE TABLE IF NOT EXISTS `veterinaria`.`diagnostico` (
-  `iddiagnostico` INT NOT NULL AUTO_INCREMENT,
-  `descripcion` VARCHAR(45) NOT NULL,
-  `paciente_idpaciente` INT(11) NOT NULL,
-  PRIMARY KEY (`iddiagnostico`),
-  CONSTRAINT `fk_diagnostico_paciente1`
-    FOREIGN KEY (`paciente_idpaciente`)
-    REFERENCES `veterinaria`.`paciente` (`idpaciente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8;
+CREATE VIEW ListadoEspecie
+AS 
+Select *
+FROM especie;
 
 
--- Table `veterinaria`.`historial_medico`
-CREATE TABLE IF NOT EXISTS `veterinaria`.`historial_medico` (
-  `idhistorial_medico` INT(11) NOT NULL AUTO_INCREMENT,
-  `fecha` DATE NOT NULL,
-  `tipo_procedimiento` VARCHAR(45) NOT NULL,
-  `nombre_vacuna` VARCHAR(45) NOT NULL,
-  `fecha_vacunacion` VARCHAR(45) NOT NULL,
-  `notas` LONGTEXT NOT NULL,
-  `paciente_idpaciente` INT(11) NOT NULL,
-  PRIMARY KEY (`idhistorial_medico`),
-  CONSTRAINT `fk_historial_medico_paciente1`
-    FOREIGN KEY (`paciente_idpaciente`)
-    REFERENCES `veterinaria`.`paciente` (`idpaciente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+CREATE VIEW listadoRaza
+AS
+Select *
+FROM raza;
+
+CREATE VIEW listadoDocumento
+AS
+Select *
+FROM tipoDocumento;
+
+CREATE VIEW rPropietario AS
+Select  nombres,numDocumento,telefono,celular,correo
+from propietario; 
+
+CREATE VIEW ReporteUsuarios AS
+Select  nombreUsu,celular,correo
+from usuario; 
+
+CREATE VIEW reportes
+	AS
+	Select c.fecha,p.nombres as propietario,p.numDocumento,m.nombreMas as Mascota,m.sexo
+	from chequeo c
+	inner join mascota m on(m.idMascota=c.codMascota)
+	inner join propietario p on(p.idPropietario=m.codPropietario)
+	where year(curDate())= year(fecha) 
+	and month(curDate()) = month(fecha);
+----------------------inserciones---------------------------------------------	
 
 
--- Table `veterinaria`.`usuario`
-CREATE TABLE IF NOT EXISTS `veterinaria`.`usuario` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombres` VARCHAR(45) NOT NULL,
-  `usuario` VARCHAR(45) NOT NULL,
-  `clave` VARCHAR(15) NOT NULL,
-  `correo` VARCHAR(20) NULL DEFAULT NULL,
-  `telefono` VARCHAR(7) NULL DEFAULT NULL,
-  `celular` VARCHAR(10) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8;
-
-
-
-
-/*insercion de especie*/
-INSERT INTO `veterinaria`.`especie` (`idespecie`, `nombre`) 
-VALUES (NULL, 'canina'), (NULL, 'felina'), (NULL, 'reptiles'), (NULL, 'aves');
+insert into ListadoEspecie (nomEspecie) values('canino');
+insert into listadoRaza (nomRaza) values('pitbull');
+insert into listadoDocumento (documento) values('Cedula de ciudadania'),('Tarjeta de identidad');
+insert into rol(rol)values('Veterinario'),('Auxiliar');
+	insert into usuario(nombreUsu,usuario,clave,codRol,telefono,celular,correo) 
+		values('fabio andres','veterinario','$2y$10$j1mb7m0GClyAfYq.QS5I/.HLeC.xzWPzeb5VO2rtLX5f0s2Zojqgu','1','','3212314422','fagaince@misena.edu.co');
+  	
