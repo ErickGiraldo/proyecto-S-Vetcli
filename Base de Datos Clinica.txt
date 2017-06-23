@@ -1,140 +1,94 @@
-CREATE database HistoriaClinica;
+CREATE DATABASE veterinaria;
 
-use HistoriaClinica;
+USE veterinaria;
 
+CREATE TABLE especie
+(
+	idEspecie int primary key auto_increment,
+	nomEspecie varchar(45) not null
+);
 
-CREATE TABLE Propietario(
-`codHistoriaClinica` INT NOT NULL auto_increment,
-`Nombre` VARCHAR(50) NOT NULL,
-`C.C` VARCHAR(20) NOT NULL,
-`Telefono` VARCHAR(20) NOT NULL,
-`Celular` VARCHAR(20) NOT NULL,
-`Direccion` VARCHAR(20) NOT NULL,
-`CorreoElectronico` VARCHAR(20) NOT NULL,
+CREATE TABLE raza
+(
+	idRaza int primary key auto_increment,
+	nomRaza  varchar(45) not null
+);
+CREATE TABLE TipoDocumento(
+	idTipoDocu int not null primary key auto_increment,
+	documento char(20) not null
+);
 
-PRIMARY KEY (`codHistoriaClinica`)
-)ENGINE = InnoDB;
+CREATE table propietario
+(
+	idPropietario int primary key auto_increment,
+	nombres varchar(50) not null,
+	codDocumento int not null,
+	numDocumento varchar(10) not null,
+    telefono char(7) not null,
+    celular char(10) not null,
+    direccion text not null,
+    correo varchar(70) not null,
+    foreign key(codDocumento) references TipoDocumento(idTipoDocu)
+);
 
+CREATE TABLE mascota
+(
+	idMascota int primary key auto_increment,
+	nombreMas varchar(45) not null,
+	sexo char(6) not null,
+    color varchar(45) not null,
+    fechaNaci date not null,
+    codPropietario int,
+    codEspecie int,
+    codRaza int,
+    foreign key (codPropietario) references propietario(idPropietario),
+    foreign key (codEspecie) references especie (idEspecie),
+    foreign key (codRaza) references raza (idRaza)
+);
 
-CREATE TABLE Pacientes (
-`codPaciente` INT NOT NULL auto_increment,
-`Nombre` VARCHAR(20) NOT NULL,
-`Especie` VARCHAR(20) NOT NULL,
-`Raza` VARCHAR(20) NOT NULL,
-`Genero` VARCHAR(20) NOT NULL,
-`Color` VARCHAR(20) NOT NULL,
-`Edad` VARCHAR(20) NOT NULL,
-`F.C` VARCHAR(20) NOT NULL,
-`F.R` VARCHAR(20) NOT NULL,
-`TLLC` VARCHAR(20) NOT NULL,
-`Temperatura` VARCHAR(20) NOT NULL,
-`Peso` VARCHAR(20) NOT NULL,
-`Ciclo Estral` VARCHAR(20) NOT NULL,
-`Planif.` VARCHAR(20) NOT NULL,
-`Entero(a)` VARCHAR(20),
-`Castrado(a)` VARCHAR(20),
-`Vacunas` VARCHAR(20) NOT NULL,
-`Desparacitacion` VARCHAR(20) NOT NULL,
-`Anamnesicos` VARCHAR(500) NOT NULL,
-`Antipulgas` VARCHAR(50) NOT NULL,
-`Alimentacion` VARCHAR(500) NOT NULL,
-`Cod_Propietario` INT NOT NULL,
-PRIMARY KEY (`codPaciente`),
+CREATE TABLE diagnostico
+(
+	idDiagno int primary key auto_increment,
+	diagnostico text not null,
+	codMascota int,
+	foreign key(codMascota) references mascota (idMascota)
+);
 
-CONSTRAINT `Cod_Propietario` FOREIGN KEY (`Cod_Propietario`)REFERENCES Propietario (`codHistoriaClinica`)
-)ENGINE = InnoDB;
+CREATE TABLE chequeo
+( 
+	idChequeo int primary key auto_increment,
+	fc char(4) not null,
+	fr char(4) not null,
+	tllc char (4) not null,
+	temperatura char(10) not null,
+	peso varchar(10) not null,
+	entero char(2) null,
+	vacunas varchar(45) not null,
+	alimentacion varchar(45) not null,
+	desparacitacion varchar(45) not null,
+	anamnesicos text not null,
+	codMascota int,
+	fecha date not null,
+	foreign key(codMascota) references mascota (idMascota)
+);
 
+CREATE TABLE rol(
+idRol int primary key auto_increment,
+rol varchar(11) not null
+);
 
-CREATE TABLE EstadoGeneral(
-`codEstadoGeneral` INT NOT NULL auto_increment,
-`Nariz` VARCHAR(200) NOT NULL,
-`Boca` VARCHAR(200) NOT NULL,
-`Ojos` VARCHAR(200) NOT NULL,
-`Orejas` VARCHAR(200) NOT NULL,
-`Piel` VARCHAR(200) NOT NULL,
-`Extremidades` VARCHAR(500) NOT NULL,
-`Mucosas` VARCHAR(60) NOT NULL,
-`Pelaje` VARCHAR(200) NOT NULL,
-`Dientes` VARCHAR(100) NOT NULL,
-`Uñas` VARCHAR(60) NOT NULL,
-`Cod_Paciente` INT NULL,
-PRIMARY KEY (`codEstadoGeneral`),
-
-CONSTRAINT `cod_Paciente`FOREIGN KEY (`Cod_Paciente`)REFERENCES Pacientes(`codPaciente`)
-)ENGINE = InnoDB;
-
-
-
-CREATE TABLE Sistemas (
-`codSistemas` INT NOT NULL auto_increment,
-`Musculos/Esqueleticos` VARCHAR(200) NOT NULL,
-`Respiratorio` VARCHAR(200) NOT NULL,
-`Urinario/Reproductivo` VARCHAR(200) NOT NULL,
-`Neurologico` VARCHAR(200) NOT NULL,
-`Optico/Oftalmologico` VARCHAR(200) NOT NULL,
-`Tegumentario` VARCHAR(200) NOT NULL,
-`CardioVascular` VARCHAR(200) NOT NULL,
-`Digestivo` VARCHAR(200) NOT NULL,
-`Co_Paciente` INT NOT NULL,
-PRIMARY KEY (`codSistemas`),
-CONSTRAINT `Co_Paciente`FOREIGN KEY (`Co_Paciente`)REFERENCES Pacientes (`codPaciente`)
-)ENGINE = InnoDB;
-
-
-CREATE TABLE AyudasDiagnostico (
-`id_Ayudas` INT NOT NULL auto_increment,
-`Tratamiento` TEXT(10000) NOT NULL,
-`DiagnosticoPresuntivo` TEXT(10000) NOT NULL,
-`DiagnosticoDiferencial` TEXT(10000) NOT NULL,
-`Cod_EstadoGeneral` INT NOT NULL,
-`Cod_Sistemas` INT NOT NULL,
-PRIMARY KEY (`id_Ayudas`),
-
-CONSTRAINT `codSistemas`FOREIGN KEY (`Cod_Sistemas`) REFERENCES Sistemas(`codSistemas`),
-CONSTRAINT `codEstadoGeneral` FOREIGN KEY (`Cod_EstadoGeneral`)REFERENCES EstadoGeneral (`codEstadoGeneral`)
-)ENGINE = InnoDB;
-
-
-CREATE TABLE CarnetVacunacion (
-`codCarnetVacunacion`INT NOT NULL auto_increment,
-`Fecha` DATE NOT NULL,
-`Nombre` VARCHAR(20) NOT NULL,
-`Especie` VARCHAR(20) NOT NULL,
-`Raza` VARCHAR(20) NOT NULL,
-`Color` VARCHAR(20) NOT NULL,
-`Genero` VARCHAR(20) NOT NULL,
-`Edad` VARCHAR(20) NOT NULL,
-`Propietario` VARCHAR(50) NOT NULL,
-`Direccion` VARCHAR(20) NOT NULL,
-`Telefono` VARCHAR(20) NOT NULL,
-`Celular` VARCHAR(20) NOT NULL,
-`Vacunas` VARCHAR(20) NOT NULL,
-`FechaVacuna` DATE NOT NULL,
-`FechaRefuerzo` DATE NOT NULL,
-`Firma` VARCHAR(20) NOT NULL,
-`Cod_Paciente` INT NOT NULL,
-PRIMARY KEY (`codCarnetVacunacion`),
-
-CONSTRAINT `id_Paciente`FOREIGN KEY (`Cod_Paciente`)REFERENCES Pacientes (`codPaciente`)
-)ENGINE = InnoDB;
-
-
-CREATE TABLE ComprobantePago (
-`N°Factura` INT NOT NULL auto_increment,
-`Propietario` VARCHAR(50) NOT NULL,
-`Mascota` VARCHAR(20) NOT NULL,
-`Raza` VARCHAR(20) NOT NULL,
-`Genero` VARCHAR(20) NOT NULL,
-`Color` VARCHAR(20) NOT NULL,
-`Collar` VARCHAR(20),
-`Precio` DOUBLE NOT NULL,
-`Observaciones` varchar(300) NOT NULL,
-`Cod_Propietario` INT NOT NULL,
-PRIMARY KEY (`N°Factura`),
-
-CONSTRAINT `codpropietario`FOREIGN KEY (`Cod_Propietario`) REFERENCES Propietario (`codHistoriaClinica`)
-)ENGINE = InnoDB;
-
+CREATE TABLE usuario
+(
+	idUsuario int primary key auto_increment,
+	nombreUsu varchar(50) not null,
+	usuario varchar(20) not null,
+	clave varchar(80) not null,
+	codRol int,
+	telefono char(7) null,
+	celular char(10) not null,
+	correo varchar(70) not null,
+	foreign key(codRol) references rol(idRol)
+);
 
 
 insert into propietario(`Nombre`,`C.C`,`Telefono`,`Celular`,`Direccion`,`CorreoElectronico`)
